@@ -1,5 +1,5 @@
 {
-  "name": "rescript-xx",
+  "name": "rescript-wechat-sdk",
   "version": "1.0.0-alpha.0",
   "description": "",
   "repository": "",
@@ -12,7 +12,7 @@
   },
   "keywords": [],
   "devDependencies": {
-    "rescript": "^9.1.4"
+    "rescript": "^10.1.4"
   },
   "dependencies": {}
 }
