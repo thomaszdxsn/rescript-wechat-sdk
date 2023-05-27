@@ -20,7 +20,7 @@ module EventChannle = {
   type t
 
   @send
-  external emit: (t, string, {..}) => uint = "emit"
+  external emit: (t, string, {..}) => unit = "emit"
 
   @send
   external on: (t, string, {..} => unit) => unit = "on"

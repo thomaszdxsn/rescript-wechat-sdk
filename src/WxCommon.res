@@ -385,9 +385,9 @@ module Performance = {
       uri: string,
       initiatorType: [
         | #audio
-        | @as("cover-image") #coverImage
+        | #"cover-image"
         | #image
-        | @as("open-data") #openData
+        | #"open-data"
       ],
       transferSize: float,
       domainLookupStart: float,

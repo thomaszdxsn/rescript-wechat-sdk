@@ -3,11 +3,11 @@ type wx = WxCommon.wx
 type openMiniProgramOptions = {
   appid: string,
   path?: string,
-  extraData?: {..},
+  extraData?: Js.Dict.t<string>,
   envVersion?: [#develop | #trail | #release],
   shortLink?: string,
   verify?: [#binding | #unionProduct],
-  onRelaunchIfPathUnchanged?: boolean,
+  onRelaunchIfPathUnchanged?: bool,
 }
 
 // https://developers.weixin.qq.com/miniprogram/dev/api/navigate/wx.openEmbeddedMiniProgram.html
