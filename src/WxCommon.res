@@ -152,9 +152,6 @@ external getAppAuthorizeSetting: wx => authorizeSetting = "getAppAuthorizeSettin
 @send
 external updateWeChatApp: wx => promise<unit> = "updateWeChatApp"
 
-@send
-external applyUpdate: updateManager => unit = "applyUpdate"
-
 module UpdateManager = {
   type t
 
@@ -170,6 +167,9 @@ module UpdateManager = {
   @send
   external onUpdateReady: (t, unit => unit) => unit = "onUpdateReady"
 }
+
+@send
+external applyUpdate: UpdateManager.t => unit = "applyUpdate"
 
 // 「基础.小程序」相关API:  https://developers.weixin.qq.com/miniprogram/dev/api/base/app/life-cycle/wx.getLaunchOptionsSync.html
 
@@ -314,7 +314,7 @@ module RealtimeLogManager = {
     type t
 
     @send
-    external make: (RealtimeLogManager.t, string) => t = "tag"
+    external make: ({..}, string) => t = "tag"
 
     @send
     external addFilterMsg: (t, string) => unit = "addFilterMsg"
@@ -361,23 +361,6 @@ module Performance = {
     | #loadPackage
     | #resource
   ]
-
-  @send
-  external getPerformance: wx => t = "getPerformance"
-
-  @send
-  external getEntries: t => array<PerformanceEntry.t> = "getEntries"
-
-  @send
-  external getEntriesByName: (t, string, entryType) => array<PerformanceEntry.t> =
-    "getEntriesByName"
-
-  @send
-  external getEntriesByType: (t, entryType) => array<PerformanceEntry.t> = "getEntriesByType"
-
-  @send
-  external setBufferSize: (t, int) => unit = "setBufferSize"
-
   module PerformanceEntry = {
     type t = {
       entryType: entryType,
@@ -412,6 +395,22 @@ module Performance = {
     }
   }
 
+  @send
+  external getPerformance: wx => t = "getPerformance"
+
+  @send
+  external getEntries: t => array<PerformanceEntry.t> = "getEntries"
+
+  @send
+  external getEntriesByName: (t, string, entryType) => array<PerformanceEntry.t> =
+    "getEntriesByName"
+
+  @send
+  external getEntriesByType: (t, entryType) => array<PerformanceEntry.t> = "getEntriesByType"
+
+  @send
+  external setBufferSize: (t, int) => unit = "setBufferSize"
+
   module EntryList = {
     type t
 
@@ -430,7 +429,7 @@ module Performance = {
     type t
 
     @send
-    external createObserver: (Performance.t, EntryList.t => unit) => t = "createObserver"
+    external createObserver: ({..}, EntryList.t => unit) => t = "createObserver"
 
     @send
     external disconnect: t => unit = "disconnect"
