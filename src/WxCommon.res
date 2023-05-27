@@ -9,10 +9,10 @@ external env: wx => {"USER_DATA_PATH": string} = "env"
 external canIUse: (wx, string) => bool = "canIUse"
 
 @deprecated @send
-external base64ToArrayBuffer: (wx, string) => Js_typed_array.array_buffer = "base64ToArrayBuffer"
+external base64ToArrayBuffer: (wx, string) => Js.TypedArray2.ArrayBuffer.t = "base64ToArrayBuffer"
 
 @deprecated @send
-external arrayBufferToBase64: (wx, Js_typed_array.array_buffer) => string = "arrayBufferToBase64"
+external arrayBufferToBase64: (wx, Js.TypedArray2.ArrayBuffer.t) => string = "arrayBufferToBase64"
 
 // 「基础.系统」相关API
 // https://developers.weixin.qq.com/miniprogram/dev/api/base/system/wx.openSystemBluetoothSetting.html
@@ -186,3 +186,298 @@ type launchOptions = {
 
 @send
 external getLaunchOptionsSync: wx => launchOptions = "getLaunchOptionsSync"
+
+@send
+external getEnterOptionsSync: wx => launchOptions = "getEnterOptionsSync"
+
+@send
+external onUnhandleRejection: (wx, {"reason": string, "promise": promise<'a>} => unit) => unit =
+  "onUnhandledRejection"
+
+@send
+external onThemeChange: (wx, {"theme": [#light | #dark]} => unit) => unit = "onThemeChange"
+
+@send
+external onPageNotFound: (
+  wx,
+  {"path": string, "query": Js.Dict.t<string>, "isEntryPage": bool} => unit,
+) => unit = "onPageNotFound"
+
+// https://developers.weixin.qq.com/miniprogram/dev/api/base/app/app-event/wx.onLazyLoadError.html
+@send
+external onLazyLoadError: (
+  wx,
+  {"type": string, "subpackage": array<'a>, "errMsg": string} => unit,
+) => unit = "onLazyLoadError"
+
+@send
+external onError: (wx, {"message": string, "stack": string} => unit) => unit = "onError"
+
+@send
+external onAudioInterruptionEnd: (wx, unit => unit) => unit = "onAudioInterruptionEnd"
+
+@send
+external onAudioInterruptionBegin: (wx, unit => unit) => unit = "onAudioInterruptionBegin"
+
+@send
+external onAppShow: (wx, launchOptions => unit) => unit = "onAppShow"
+
+@send
+external onAppHide: (wx, unit => unit) => unit = "onAppHide"
+
+@send
+external offUnhandledRejection: (wx, {"reason": string, "promise": promise<'a>} => unit) => unit =
+  "offUnhandledRejection"
+
+@send
+external offThemeChange: (wx, {"theme": [#light | #dark]} => unit) => unit = "offThemeChange"
+
+@send
+external offPageNotFound: (
+  wx,
+  {"path": string, "query": Js.Dict.t<string>, "isEntryPage": bool} => unit,
+) => unit = "offPageNotFound"
+
+@send
+external offLazyLoadError: (
+  wx,
+  {"type": string, "subpackage": array<'a>, "errMsg": string} => unit,
+) => unit = "offLazyLoadError"
+
+@send
+external offError: (wx, {"message": string, "stack": string} => unit) => unit = "offError"
+
+@send
+external offAudioInterruptionEnd: (wx, unit => unit) => unit = "offAudioInterruptionEnd"
+
+@send
+external offAudioInterruptionBegin: (wx, unit => unit) => unit = "offAudioInterruptionBegin"
+
+@send
+external offAppShow: (wx, launchOptions => unit) => unit = "offAppShow"
+
+@send
+external offAppHide: (wx, unit => unit) => unit = "offAppHide"
+
+// 「基础.调试」相关APIs
+
+@send
+external setEnableDebug: (wx, {"enableDebug": bool}) => promise<'a> = "setEnableDebug"
+
+module LogManager = {
+  type t
+
+  @send
+  external getLogManager: (wx, {"label": int}) => t = "getLogManager"
+
+  @send
+  external debug: (t, 'a) => unit = "debug"
+  @send
+  external info: (t, 'a) => unit = "info"
+  @send
+  external log: (t, 'a) => unit = "log"
+  @send
+  external warn: (t, 'a) => unit = "warn"
+}
+
+module RealtimeLogManager = {
+  type t
+  type logState = {
+    size: int,
+    maxSize: int,
+    logCount: int,
+    maxLogCount: int,
+  }
+
+  @send
+  external getRealtimeLogManager: wx => t = "getRealtimeLogManager"
+
+  @send
+  external addFilterMsg: (t, string) => unit = "addFilterMsg"
+
+  @send
+  external error: (t, 'a) => unit = "error"
+
+  @send
+  external getCurrentState: t => logState = "getCurrentState"
+
+  @send
+  external info: (t, 'a) => unit = "info"
+
+  @send
+  external setFilterMsg: (t, string) => unit = "setFilterMsg"
+
+  @send
+  external warn: (t, 'a) => unit = "warn"
+
+  module RealtimeTagLogManager = {
+    type t
+
+    @send
+    external make: (RealtimeLogManager.t, string) => t = "tag"
+
+    @send
+    external addFilterMsg: (t, string) => unit = "addFilterMsg"
+
+    @send
+    external error: (t, 'a) => unit = "error"
+
+    @send
+    external getCurrentState: t => logState = "getCurrentState"
+
+    @send
+    external info: (t, 'a) => unit = "info"
+
+    @send
+    external setFilterMsg: (t, string) => unit = "setFilterMsg"
+
+    @send
+    external warn: (t, 'a) => unit = "warn"
+  }
+}
+
+// 「基础.性能」相关APIs
+@send
+external reportPerformance: (wx, int, int, string) => unit = "reportPerformance"
+
+@send
+external preloadWebview: wx => promise<'a> = "preloadWebview"
+
+@send
+external preloadSkylineView: wx => promise<'a> = "preloadSkylineView"
+
+@send
+external preloadAssets: (
+  wx,
+  {"data": array<{"type": [#font | #image], "src": string}>},
+) => promise<'a> = "preloadAssets"
+
+module Performance = {
+  type t
+  type entryType = [
+    | #navigation
+    | #render
+    | #script
+    | #loadPackage
+    | #resource
+  ]
+
+  @send
+  external getPerformance: wx => t = "getPerformance"
+
+  @send
+  external getEntries: t => array<PerformanceEntry.t> = "getEntries"
+
+  @send
+  external getEntriesByName: (t, string, entryType) => array<PerformanceEntry.t> =
+    "getEntriesByName"
+
+  @send
+  external getEntriesByType: (t, entryType) => array<PerformanceEntry.t> = "getEntriesByType"
+
+  @send
+  external setBufferSize: (t, int) => unit = "setBufferSize"
+
+  module PerformanceEntry = {
+    type t = {
+      entryType: entryType,
+      name: string,
+      startTime: float,
+      duration: float,
+      path: string,
+      referrerPath: string,
+      pageId: int,
+      referrerPageId: int,
+      navigationStart: float,
+      navigationType: string,
+      moduleName: string,
+      fileList: array<string>,
+      viewLayerReadyTime: float,
+      initDataSendTime: float,
+      initDataRecvTime: float,
+      viewLayerRenderStartTime: float,
+      viewLayerRenderEndTime: float,
+      packageName: string,
+      packageSize: float,
+      uri: string,
+      initiatorType: [
+        | #audio
+        | @as("cover-image") #coverImage
+        | #image
+        | @as("open-data") #openData
+      ],
+      transferSize: float,
+      domainLookupStart: float,
+      domainLookupEnd: float,
+    }
+  }
+
+  module EntryList = {
+    type t
+
+    @send
+    external getEntries: t => array<PerformanceEntry.t> = "getEntries"
+
+    @send
+    external getEntriesByName: (t, string, entryType) => array<PerformanceEntry.t> =
+      "getEntriesByName"
+
+    @send
+    external getEntriesByType: (t, entryType) => array<PerformanceEntry.t> = "getEntriesByType"
+  }
+
+  module PerformanceObserver = {
+    type t
+
+    @send
+    external createObserver: (Performance.t, EntryList.t => unit) => t = "createObserver"
+
+    @send
+    external disconnect: t => unit = "disconnect"
+
+    @send
+    external observe: (t, {"entryTypes": array<entryType>}) => unit = "observe"
+  }
+}
+
+// 「基础.分包加载」相关APIs
+
+// https://developers.weixin.qq.com/miniprogram/dev/api/base/subpackage/wx.preDownloadSubpackage.html
+module PreDownloadSubpackageTask = {
+  type t
+
+  @send
+  external make: (wx, {"packageType": [#workers]}) => t = "preDownloadSubpackage"
+
+  @send
+  external onProgressUpdate: (
+    t,
+    {"progress": int, "totalBytesWritten": int, "totalBytesExpectedToWrite": int} => unit,
+  ) => unit = "onProgressUpdate"
+}
+
+// 「基础.加密」相关APIs
+
+// https://developers.weixin.qq.com/miniprogram/dev/api/base/crypto/wx.getUserCryptoManager.html
+module UserCryptoManager = {
+  type t
+
+  @send
+  external make: wx => t = "getUserCryptoManager"
+
+  @send
+  external getLatestUserKey: t => promise<{
+    "encryptKey": string,
+    "iv": string,
+    "version": int,
+    "expireTime": int,
+  }> = "getLatestUserKey"
+
+  @send
+  external getRandomValues: (
+    t,
+    {"length": int},
+  ) => promise<{
+    "randomValues": Js.TypedArray2.ArrayBuffer.t,
+  }> = "getRandomValues"
+}
