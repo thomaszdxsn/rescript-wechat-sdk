@@ -1,13 +1,13 @@
 type wx = WxCommon.wx
 
 @send
-external reportMonitor: (string, int) => unit = "reportMonitor"
+external reportMonitor: (wx, string, int) => unit = "reportMonitor"
 
 @send
-external reportEvent: (string, {..}) => unit = "reportEvent"
+external reportEvent: (wx, string, {..}) => unit = "reportEvent"
 
 @send
-external reportAnalytics: (string, {..}) => unit = "reportAnalytics"
+external reportAnalytics: (wx, string, {..}) => unit = "reportAnalytics"
 
 @send
-external getExpInfoSync: (array<string>) => {..} = "getExpInfoSync"
+external getExpInfoSync: (wx, array<string>) => {..} = "getExpInfoSync"
