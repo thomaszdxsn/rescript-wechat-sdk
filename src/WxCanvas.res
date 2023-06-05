@@ -125,9 +125,11 @@ module RenderingContext = {
 
   @send external setTextgAlign: (t, [#left | #center | #right]) => unit = "setTextgAlign"
 
-  @send external setTextBaseline: (t, [#top | #bottom | #middle | #normal]) => unit = "setTextBaseline"
+  @send
+  external setTextBaseline: (t, [#top | #bottom | #middle | #normal]) => unit = "setTextBaseline"
 
-  @send external setTransform: (t, float, float, float, float, float, float) => unit = "setTransform"
+  @send
+  external setTransform: (t, float, float, float, float, float, float) => unit = "setTransform"
 
   @send external stroke: t => unit = "stroke"
 
